@@ -1,4 +1,5 @@
-const CACHE_NAME = 'et-v1';
+// BUILD: 2026-04-18T14-30-00
+const CACHE_NAME = 'et-v2';
 
 self.addEventListener('install', event => {
   self.skipWaiting();

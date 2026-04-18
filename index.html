@@ -35,6 +35,94 @@
   --water-glow: rgba(79,200,255,0.2);
 }
 
+/* ── LIGHT MODE ── */
+[data-theme="light"] {
+  --bg: #f0f4ff;
+  --surface: #ffffff;
+  --surface2: #e8edf8;
+  --surface3: #dde3f0;
+  --border: #ccd3e8;
+  --border2: #b8c2dc;
+  --accent: #3060cc;
+  --accent-glow: rgba(48,96,204,0.2);
+  --green: #00a855;
+  --green-glow: rgba(0,168,85,0.2);
+  --orange: #cc6600;
+  --pink: #cc2266;
+  --yellow: #998800;
+  --text: #0d1428;
+  --muted: #8898bb;
+  --muted2: #556688;
+  --water: #0080cc;
+  --water-glow: rgba(0,128,204,0.2);
+}
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse 600px 400px at 80% 0%, rgba(48,96,204,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 10% 60%, rgba(0,168,85,0.06) 0%, transparent 70%);
+}
+
+/* ── DISCO MODE ── */
+[data-theme="disco"] {
+  --bg: #060008;
+  --surface: #110016;
+  --surface2: #1a0022;
+  --surface3: #220030;
+  --border: #330044;
+  --border2: #440055;
+  --accent: #ff00ff;
+  --accent-glow: rgba(255,0,255,0.3);
+  --green: #00ffcc;
+  --green-glow: rgba(0,255,204,0.3);
+  --orange: #ff8800;
+  --pink: #ff0099;
+  --yellow: #ffee00;
+  --text: #ffffff;
+  --muted: #663377;
+  --muted2: #aa55cc;
+  --water: #00ccff;
+  --water-glow: rgba(0,204,255,0.3);
+}
+[data-theme="disco"] body::before {
+  animation: disco-bg 4s linear infinite;
+}
+@keyframes disco-bg {
+  0%   { background: radial-gradient(ellipse 700px 500px at 80% 0%, rgba(255,0,255,0.12) 0%, transparent 70%), radial-gradient(ellipse 500px 400px at 10% 70%, rgba(0,255,204,0.1) 0%, transparent 70%); }
+  25%  { background: radial-gradient(ellipse 700px 500px at 20% 10%, rgba(0,204,255,0.12) 0%, transparent 70%), radial-gradient(ellipse 500px 400px at 80% 80%, rgba(255,0,153,0.1) 0%, transparent 70%); }
+  50%  { background: radial-gradient(ellipse 700px 500px at 50% 90%, rgba(255,238,0,0.10) 0%, transparent 70%), radial-gradient(ellipse 500px 400px at 90% 20%, rgba(255,0,255,0.1) 0%, transparent 70%); }
+  75%  { background: radial-gradient(ellipse 700px 500px at 10% 50%, rgba(0,255,204,0.12) 0%, transparent 70%), radial-gradient(ellipse 500px 400px at 60% 10%, rgba(0,204,255,0.1) 0%, transparent 70%); }
+  100% { background: radial-gradient(ellipse 700px 500px at 80% 0%, rgba(255,0,255,0.12) 0%, transparent 70%), radial-gradient(ellipse 500px 400px at 10% 70%, rgba(0,255,204,0.1) 0%, transparent 70%); }
+}
+[data-theme="disco"] .voice-orb {
+  animation: disco-orb 2s linear infinite !important;
+}
+@keyframes disco-orb {
+  0%   { border-color: #ff00ff; box-shadow: 0 0 30px rgba(255,0,255,0.5); }
+  33%  { border-color: #00ffcc; box-shadow: 0 0 30px rgba(0,255,204,0.5); }
+  66%  { border-color: #ff8800; box-shadow: 0 0 30px rgba(255,136,0,0.5); }
+  100% { border-color: #ff00ff; box-shadow: 0 0 30px rgba(255,0,255,0.5); }
+}
+[data-theme="disco"] .logo {
+  animation: disco-text 2s linear infinite;
+}
+@keyframes disco-text {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+[data-theme="disco"] .ET-avatar {
+  animation: disco-avatar 1.5s linear infinite !important;
+}
+@keyframes disco-avatar {
+  0%   { background: linear-gradient(135deg, #ff00ff, #00ffcc); }
+  33%  { background: linear-gradient(135deg, #00ccff, #ff0099); }
+  66%  { background: linear-gradient(135deg, #ffee00, #ff00ff); }
+  100% { background: linear-gradient(135deg, #ff00ff, #00ffcc); }
+}
+[data-theme="disco"] .nav {
+  background: rgba(6,0,8,0.97);
+  border-top: 1px solid rgba(255,0,255,0.3);
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -837,7 +925,7 @@ body::after {
   background: rgba(6,8,15,0.95);
   backdrop-filter: blur(16px);
   border-top: 1px solid var(--border);
-  padding: 10px 28px 20px;
+  padding: 10px 28px calc(20px + env(safe-area-inset-bottom, 0px));
   display: flex;
   justify-content: space-around;
   z-index: 100;
@@ -1343,7 +1431,7 @@ body::after {
 
 .ET-bubble {
   position: fixed;
-  bottom: 105px;
+  bottom: calc(120px + env(safe-area-inset-bottom, 16px));
   right: 16px;
   z-index: 300;
   display: flex;
@@ -1351,6 +1439,8 @@ body::after {
   align-items: flex-end;
   gap: 8px;
   pointer-events: none;
+  /* Never overlap the log section — bubble stays in upper 60% of screen */
+  max-height: 60vh;
 }
 
 .ET-avatar {
@@ -2010,9 +2100,62 @@ body::after {
   <div class="view active" id="viewToday">
 
     <div class="header">
-      <div class="logo">👽 ET</div>
+      <div class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:7px;">
+          <defs>
+            <radialGradient id="headGrad" cx="50%" cy="40%" r="55%">
+              <stop offset="0%" stop-color="#7affe0"/>
+              <stop offset="100%" stop-color="#3dffa0"/>
+            </radialGradient>
+            <radialGradient id="eyeGradL" cx="40%" cy="35%" r="60%">
+              <stop offset="0%" stop-color="#001a33"/>
+              <stop offset="100%" stop-color="#003366"/>
+            </radialGradient>
+            <radialGradient id="eyeGradR" cx="40%" cy="35%" r="60%">
+              <stop offset="0%" stop-color="#001a33"/>
+              <stop offset="100%" stop-color="#003366"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="1.2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <!-- Head — tall teardrop alien cranium -->
+          <ellipse cx="18" cy="17" rx="13" ry="15.5" fill="url(#headGrad)" filter="url(#glow)"/>
+          <!-- Cranium highlight -->
+          <ellipse cx="14" cy="10" rx="4" ry="5.5" fill="rgba(255,255,255,0.18)" transform="rotate(-15 14 10)"/>
+          <!-- Left eye — large slanted almond -->
+          <ellipse cx="12.5" cy="18" rx="4.5" ry="3.2" fill="url(#eyeGradL)" transform="rotate(-18 12.5 18)"/>
+          <ellipse cx="12.5" cy="18" rx="4.5" ry="3.2" fill="none" stroke="#00ffcc" stroke-width="0.5" transform="rotate(-18 12.5 18)" opacity="0.7"/>
+          <!-- Right eye — large slanted almond -->
+          <ellipse cx="23.5" cy="18" rx="4.5" ry="3.2" fill="url(#eyeGradR)" transform="rotate(18 23.5 18)"/>
+          <ellipse cx="23.5" cy="18" rx="4.5" ry="3.2" fill="none" stroke="#00ffcc" stroke-width="0.5" transform="rotate(18 23.5 18)" opacity="0.7"/>
+          <!-- Eye shine dots -->
+          <circle cx="11.2" cy="17" r="1.1" fill="rgba(255,255,255,0.85)"/>
+          <circle cx="22.2" cy="17" r="1.1" fill="rgba(255,255,255,0.85)"/>
+          <!-- Tiny iris glow -->
+          <circle cx="13" cy="18.5" r="1.5" fill="#4f8fff" opacity="0.6"/>
+          <circle cx="24" cy="18.5" r="1.5" fill="#4f8fff" opacity="0.6"/>
+          <!-- Nostrils — tiny slits -->
+          <ellipse cx="16.5" cy="23.5" rx="0.9" ry="0.45" fill="rgba(0,80,40,0.5)" transform="rotate(-10 16.5 23.5)"/>
+          <ellipse cx="19.5" cy="23.5" rx="0.9" ry="0.45" fill="rgba(0,80,40,0.5)" transform="rotate(10 19.5 23.5)"/>
+          <!-- Mouth — thin smile -->
+          <path d="M13.5 26.5 Q18 29 22.5 26.5" stroke="rgba(0,60,30,0.65)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+          <!-- Antennae -->
+          <line x1="13" y1="2" x2="10" y2="-2" stroke="#3dffa0" stroke-width="1" stroke-linecap="round" opacity="0.8"/>
+          <circle cx="9.5" cy="-2.5" r="1.3" fill="#3dffa0" opacity="0.9"/>
+          <line x1="23" y1="2" x2="26" y2="-2" stroke="#3dffa0" stroke-width="1" stroke-linecap="round" opacity="0.8"/>
+          <circle cx="26.5" cy="-2.5" r="1.3" fill="#3dffa0" opacity="0.9"/>
+        </svg>
+        <span style="background:linear-gradient(135deg,var(--accent) 0%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">ET</span>
+      </div>
       <div class="header-right">
         <div class="date-pill" id="datePill">—</div>
+        <button id="themeBtn" onclick="cycleTheme()" title="Toggle theme" style="
+          width:34px;height:34px;border-radius:10px;border:1px solid var(--border);
+          background:var(--surface2);cursor:pointer;display:flex;align-items:center;
+          justify-content:center;font-size:16px;transition:all 0.15s;
+        ">🌙</button>
         <button class="settings-btn" onclick="showGoals()" title="Set goals">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
@@ -2205,11 +2348,14 @@ body::after {
 
     <div class="divider"></div>
 
-    <!-- Log -->
-    <div class="log-section">
+    <!-- Log — separated from voice/ET zone -->
+    <div class="log-section" id="logSection">
       <div class="log-header">
         <div class="log-title">Today's log</div>
-        <div class="log-meta" id="logMeta">0 items</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="log-meta" id="logMeta">0 items</div>
+          <button onclick="document.getElementById('logSection').scrollIntoView({behavior:'smooth'})" style="background:none;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted2);padding:0;" title="Scroll to log">↓ log</button>
+        </div>
       </div>
       <div id="logEmpty" class="log-empty">
         <div class="empty-icon">🍽️</div>
@@ -2233,7 +2379,21 @@ body::after {
       </div>
     </div>
     <div class="goals-view">
+      <!-- Diet Presets -->
       <div class="goal-group">
+        <div class="goal-group-label">Quick Presets <span style="color:var(--muted);font-size:9px;margin-left:4px;">auto-fills macros by diet type</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px;">
+          <button onclick="applyDietPreset('low')" style="padding:10px 6px;border-radius:12px;border:1px solid rgba(79,200,255,0.35);background:rgba(79,200,255,0.06);cursor:pointer;font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;color:#4fc8ff;transition:all 0.15s;" onmouseover="this.style.background='rgba(79,200,255,0.14)'" onmouseout="this.style.background='rgba(79,200,255,0.06)'">
+            💧 Low Cal<div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;color:var(--muted2);margin-top:3px;">~1400 kcal</div>
+          </button>
+          <button onclick="applyDietPreset('balanced')" style="padding:10px 6px;border-radius:12px;border:1px solid rgba(61,255,160,0.35);background:rgba(61,255,160,0.06);cursor:pointer;font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;color:var(--green);transition:all 0.15s;" onmouseover="this.style.background='rgba(61,255,160,0.14)'" onmouseout="this.style.background='rgba(61,255,160,0.06)'">
+            ⚖️ Balanced<div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;color:var(--muted2);margin-top:3px;">~2000 kcal</div>
+          </button>
+          <button onclick="applyDietPreset('high')" style="padding:10px 6px;border-radius:12px;border:1px solid rgba(255,150,64,0.35);background:rgba(255,150,64,0.06);cursor:pointer;font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;color:var(--orange);transition:all 0.15s;" onmouseover="this.style.background='rgba(255,150,64,0.14)'" onmouseout="this.style.background='rgba(255,150,64,0.06)'">
+            🔥 High Cal<div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:400;color:var(--muted2);margin-top:3px;">~2800 kcal</div>
+          </button>
+        </div>
+      </div>
         <div class="goal-group-label">Daily Calories</div>
         <div class="goal-input-row">
           <div>
@@ -2241,10 +2401,10 @@ body::after {
             <div class="goal-input-sub">Total kcal per day</div>
           </div>
           <div class="goal-input-right">
-            <button class="goal-stepper-btn" onclick="adjustGoal('cal', -50)">−</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('cal', -10)">−</button>
             <div class="goal-val-display" id="goalCalDisp">2000</div>
             <div class="goal-unit">kcal</div>
-            <button class="goal-stepper-btn" onclick="adjustGoal('cal', 50)">+</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('cal', 10)">+</button>
           </div>
         </div>
       </div>
@@ -2257,10 +2417,10 @@ body::after {
             <div class="goal-input-sub">Recommended: 0.7–1g per lb bodyweight</div>
           </div>
           <div class="goal-input-right">
-            <button class="goal-stepper-btn" onclick="adjustGoal('protein', -5)">−</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('protein', -1)">−</button>
             <div class="goal-val-display" id="goalProteinDisp">150</div>
             <div class="goal-unit">g</div>
-            <button class="goal-stepper-btn" onclick="adjustGoal('protein', 5)">+</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('protein', 1)">+</button>
           </div>
         </div>
         <div class="goal-input-row">
@@ -2269,10 +2429,10 @@ body::after {
             <div class="goal-input-sub">Adjust for your activity level</div>
           </div>
           <div class="goal-input-right">
-            <button class="goal-stepper-btn" onclick="adjustGoal('carbs', -5)">−</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('carbs', -1)">−</button>
             <div class="goal-val-display" id="goalCarbsDisp">250</div>
             <div class="goal-unit">g</div>
-            <button class="goal-stepper-btn" onclick="adjustGoal('carbs', 5)">+</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('carbs', 1)">+</button>
           </div>
         </div>
         <div class="goal-input-row">
@@ -2281,10 +2441,10 @@ body::after {
             <div class="goal-input-sub">Healthy fats are essential</div>
           </div>
           <div class="goal-input-right">
-            <button class="goal-stepper-btn" onclick="adjustGoal('fat', -5)">−</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('fat', -1)">−</button>
             <div class="goal-val-display" id="goalFatDisp">65</div>
             <div class="goal-unit">g</div>
-            <button class="goal-stepper-btn" onclick="adjustGoal('fat', 5)">+</button>
+            <button class="goal-stepper-btn" onclick="adjustGoal('fat', 1)">+</button>
           </div>
         </div>
       </div>
@@ -2661,7 +2821,23 @@ body::after {
     <button class="ET-close" onclick="dismissET()">✕</button>
     <div id="ETText"></div>
   </div>
-  <div class="ET-avatar" id="ETAvatar" onclick="toggleET()">👽</div>
+  <div class="ET-avatar" id="ETAvatar" onclick="toggleET()">
+    <svg width="30" height="30" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="18" cy="17" rx="13" ry="15.5" fill="#3dffa0"/>
+      <ellipse cx="14" cy="10" rx="4" ry="5.5" fill="rgba(255,255,255,0.2)" transform="rotate(-15 14 10)"/>
+      <ellipse cx="12.5" cy="18" rx="4.5" ry="3.2" fill="#003366" transform="rotate(-18 12.5 18)"/>
+      <ellipse cx="23.5" cy="18" rx="4.5" ry="3.2" fill="#003366" transform="rotate(18 23.5 18)"/>
+      <circle cx="11.2" cy="17" r="1.1" fill="white" opacity="0.9"/>
+      <circle cx="22.2" cy="17" r="1.1" fill="white" opacity="0.9"/>
+      <circle cx="13" cy="18.5" r="1.5" fill="#4f8fff" opacity="0.7"/>
+      <circle cx="24" cy="18.5" r="1.5" fill="#4f8fff" opacity="0.7"/>
+      <path d="M13.5 26.5 Q18 29 22.5 26.5" stroke="rgba(0,60,30,0.7)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <line x1="13" y1="2" x2="10" y2="-2" stroke="#00cc80" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="9.5" cy="-2.5" r="1.3" fill="#00cc80"/>
+      <line x1="23" y1="2" x2="26" y2="-2" stroke="#00cc80" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="26.5" cy="-2.5" r="1.3" fill="#00cc80"/>
+    </svg>
+  </div>
 </div>
 
 <script>
@@ -2792,16 +2968,20 @@ async function addPantryItemManual() {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 200,
-        system: `You are a nutrition database. Given a food product name, return ONLY a JSON object:
-{"name":"product name","brand":"brand or Generic","category":"food category","calories_per_serving":number,"serving":"serving size description"}
-No markdown, no explanation, just raw JSON.`,
+        max_tokens: 300,
+        system: `You are a nutrition database. Given a food product name, return ONLY a JSON object with accurate USDA/brand nutrition data:
+{"name":"product name","brand":"brand or Generic","category":"food category","calories_per_serving":number,"protein_g":number,"carbs_g":number,"fat_g":number,"serving":"serving size description"}
+ALL macro fields must be real numbers (never null or "?"). Use your best knowledge. No markdown, no explanation, just raw JSON.`,
         messages: [{ role: 'user', content: val }]
       })
     });
     const data = await res.json();
     const raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
     const item = JSON.parse(raw);
+    // Normalize macro fields so both naming conventions work
+    if (item.protein_g !== undefined) item.protein = item.protein_g;
+    if (item.carbs_g   !== undefined) item.carbs   = item.carbs_g;
+    if (item.fat_g     !== undefined) item.fat      = item.fat_g;
     item.id = Date.now();
     item.addedAt = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
     pantryItems.unshift(item);
@@ -2853,8 +3033,8 @@ async function handleReceiptUpload(e) {
           model: 'claude-sonnet-4-20250514',
           max_tokens: 800,
           system: `You are analyzing a grocery receipt image. Extract all food and drink product names with their brands. Return ONLY a JSON array:
-[{"name":"product name","brand":"brand name","category":"category","calories_per_serving":number or null,"serving":"serving size or null"}]
-Focus on branded food items. No markdown, just raw JSON array.`,
+[{"name":"product name","brand":"brand name","category":"category","calories_per_serving":number,"protein_g":number,"carbs_g":number,"fat_g":number,"serving":"serving size"}]
+All macro fields must be numbers (never null). Use USDA/brand knowledge to estimate if exact values not visible. No markdown, just raw JSON array.`,
           messages: [{ role: 'user', content: [
             { type: 'image', source: { type: 'base64', media_type: file.type, data: base64 } },
             { type: 'text', text: 'Extract all food/drink brand items from this receipt.' }
@@ -2863,10 +3043,14 @@ Focus on branded food items. No markdown, just raw JSON array.`,
       });
 
       const data = await apiRes.json();
+      if (data.error) throw new Error(`API: ${data.error.message || 'unknown error'}`);
       const raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
       const items = JSON.parse(raw);
       const date = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
       items.forEach(item => {
+        if (item.protein_g !== undefined) item.protein = item.protein_g;
+        if (item.carbs_g   !== undefined) item.carbs   = item.carbs_g;
+        if (item.fat_g     !== undefined) item.fat      = item.fat_g;
         if (!pantryItems.find(p => p.name.toLowerCase() === item.name.toLowerCase())) {
           pantryItems.unshift({ ...item, id: Date.now() + Math.random(), addedAt: date });
         }
@@ -2890,28 +3074,33 @@ Focus on branded food items. No markdown, just raw JSON array.`,
           model: 'claude-sonnet-4-20250514',
           max_tokens: 800,
           system: `Extract food/drink items from this grocery list text. Return ONLY a JSON array:
-[{"name":"product name","brand":"brand or Generic","category":"category","calories_per_serving":number or null,"serving":"serving description"}]
-No markdown, just raw JSON array.`,
+[{"name":"product name","brand":"brand or Generic","category":"category","calories_per_serving":number,"protein_g":number,"carbs_g":number,"fat_g":number,"serving":"serving description"}]
+All macro fields must be numbers. No markdown, just raw JSON array.`,
           messages: [{ role: 'user', content: text }]
         })
       });
-      const data = await apiRes.json();
-      const raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
-      const items = JSON.parse(raw);
-      const date = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-      items.forEach(item => {
+      const data2 = await apiRes.json();
+      if (data2.error) throw new Error(`API: ${data2.error.message || 'unknown error'}`);
+      const raw2 = data2.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+      const items2 = JSON.parse(raw2);
+      const date2 = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      items2.forEach(item => {
+        if (item.protein_g !== undefined) item.protein = item.protein_g;
+        if (item.carbs_g   !== undefined) item.carbs   = item.carbs_g;
+        if (item.fat_g     !== undefined) item.fat      = item.fat_g;
         if (!pantryItems.find(p => p.name.toLowerCase() === item.name.toLowerCase())) {
-          pantryItems.unshift({ ...item, id: Date.now() + Math.random(), addedAt: date });
+          pantryItems.unshift({ ...item, id: Date.now() + Math.random(), addedAt: date2 });
         }
       });
       savePantry();
       renderPantry();
-      showToast(`✓ Added ${items.length} items from your list!`);
+      showToast(`✓ Added ${items2.length} items from your list!`);
     }
 
   } catch(err) {
-    showToast('⚠ Could not scan receipt — try a clearer photo');
-    console.error(err);
+    const msg = err.message || 'unknown error';
+    showToast(`⚠ Scan failed: ${msg.slice(0,60)}`);
+    console.error('Receipt upload error:', err);
   }
 
   document.getElementById('scanProcessing').classList.remove('show');
@@ -2945,17 +3134,67 @@ function renderPantry() {
   empty.style.display = 'none';
   label.style.display = 'block';
 
-  container.innerHTML = pantryItems.map(item => `
+  container.innerHTML = pantryItems.map(item => {
+    const cal  = item.calories_per_serving;
+    const prot = item.protein ?? item.protein_g ?? null;
+    const carb = item.carbs   ?? item.carbs_g   ?? null;
+    const fat  = item.fat     ?? item.fat_g     ?? null;
+    const hasMacros = prot !== null && carb !== null && fat !== null;
+    const macroStr = hasMacros
+      ? `P:${prot}g · C:${carb}g · F:${fat}g`
+      : `<span style="color:var(--orange);cursor:pointer" onclick="refreshPantryMacros(${item.id})" title="Tap to fetch macros">macros unknown — tap ↻</span>`;
+    return `
     <div class="pantry-item">
       <div class="pantry-item-icon">${getPantryEmoji(item.name)}</div>
       <div class="pantry-item-body">
         <div class="pantry-item-name">${item.name}</div>
         <div class="pantry-item-meta">${item.brand || 'Generic'} · ${item.category || 'Food'} · Added ${item.addedAt || ''}</div>
+        <div class="pantry-item-meta" style="color:var(--muted2);margin-top:2px;">${macroStr}</div>
       </div>
-      ${item.calories_per_serving ? `<div class="pantry-item-badge">${item.calories_per_serving} kcal</div>` : ''}
+      ${cal ? `<div class="pantry-item-badge">${cal} kcal</div>` : ''}
       <button class="pantry-item-del" onclick="deletePantryItem(${item.id})">✕</button>
     </div>
-  `).join('');
+  `}).join('');
+}
+
+
+async function refreshPantryMacros(id) {
+  if (!apiKey) { showToast('⚠ Add your API key first'); return; }
+  const item = pantryItems.find(p => p.id === id);
+  if (!item) return;
+  showToast(`👽 Fetching macros for ${item.name}...`);
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 120,
+        system: `Nutrition database. Return ONLY raw JSON for this food product:
+{"calories_per_serving":number,"protein_g":number,"carbs_g":number,"fat_g":number,"serving":"serving size"}
+All fields must be numbers. No markdown.`,
+        messages: [{ role: 'user', content: `${item.name} ${item.brand || ''}` }]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    const result = JSON.parse(raw);
+    Object.assign(item, result, {
+      protein: result.protein_g,
+      carbs:   result.carbs_g,
+      fat:     result.fat_g
+    });
+    savePantry();
+    renderPantry();
+    showToast(`✓ Macros updated for ${item.name}`);
+  } catch(e) {
+    showToast('⚠ Could not fetch macros — try again');
+  }
 }
 
 function showGoals() {
@@ -2964,6 +3203,25 @@ function showGoals() {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('viewGoals').classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+}
+
+// ── DIET PRESETS ──
+function applyDietPreset(type) {
+  const w = tmpGoals.weight || 170;
+  const presets = {
+    low:      { cal: 1400, protein: Math.round(w * 0.7), carbs: 120, fat: 45 },
+    balanced: { cal: 2000, protein: Math.round(w * 0.8), carbs: 220, fat: 65 },
+    high:     { cal: 2800, protein: Math.round(w * 1.0), carbs: 320, fat: 90 },
+  };
+  const p = presets[type];
+  if (!p) return;
+  tmpGoals.cal     = p.cal;
+  tmpGoals.protein = p.protein;
+  tmpGoals.carbs   = p.carbs;
+  tmpGoals.fat     = p.fat;
+  updateGoalDisplays();
+  const labels = { low: 'Low Cal (1400)', balanced: 'Balanced (2000)', high: 'High Cal (2800)' };
+  showToast(`✓ ${labels[type]} preset applied — tweak as needed`);
 }
 
 // ── GOALS ──
@@ -3465,6 +3723,7 @@ function startVoiceAfterWake() {
 
 // ── ORB PRESS-AND-HOLD HANDLERS ──
 let _orbPressed = false;
+let _processingVoice = false; // debounce: prevents duplicate processFood calls
 
 function orbDown(e) {
   e.preventDefault(); // block context menu & text selection on long-press
@@ -3602,10 +3861,11 @@ function _stopAndClean() {
 }
 
 // ── ACCENT + SPEECH CLEANUP AGENT ──
-// Sends the raw speech transcript to Claude Haiku which fixes mishearing,
-// accent variations, spoken numbers, filler words, and food name errors
-// before handing off to the nutrition lookup pipeline.
 async function _cleanAndProcess(rawTranscript) {
+  // Debounce: prevent duplicate calls from multiple onresult/onend firings
+  if (_processingVoice) return;
+  _processingVoice = true;
+
   document.getElementById('voiceOrb').classList.remove('listening');
   document.getElementById('voiceOrb').classList.add('processing');
   document.getElementById('voiceLabel').textContent = '👽 cleaning up...';
@@ -3613,7 +3873,7 @@ async function _cleanAndProcess(rawTranscript) {
 
   // If no API key, skip cleanup and go straight to food lookup
   if (!apiKey) {
-    processFood(rawTranscript);
+    processFood(rawTranscript).finally(() => { _processingVoice = false; });
     return;
   }
 
@@ -3654,13 +3914,14 @@ Return ONLY the cleaned food description — no explanation, no punctuation at e
 
     document.getElementById('foodInput').value = cleaned;
     showStatus(`🎤 ET heard: "${cleaned}"`, true);
-    setTimeout(() => processFood(cleaned), 300);
+    setTimeout(() => {
+      processFood(cleaned).finally(() => { _processingVoice = false; });
+    }, 300);
 
   } catch(err) {
     clearTimeout(cleanupTimer);
-    // Cleanup timed out or failed — use raw transcript, still works fine
     document.getElementById('foodInput').value = rawTranscript;
-    processFood(rawTranscript);
+    processFood(rawTranscript).finally(() => { _processingVoice = false; });
   }
 
   if (wakeWordActive) setTimeout(() => listenForWakeWord(), 4000);
@@ -4381,11 +4642,12 @@ async function processFood(input) {
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 150,
-          system: `Nutrition lookup. Return ONLY raw JSON no markdown:
+          system: `You are a comprehensive nutrition database with knowledge of USDA data, restaurant menus, and branded food products. Return ONLY raw JSON no markdown:
 {"name":"short name","type":"food or drink","calories":number,"protein":number,"carbs":number,"fat":number,"portion":"portion","source":"brand or USDA"}
+RULES: Always return real numbers — never null or "?". Use your trained knowledge of real calorie counts. When uncertain, give the most commonly cited average from nutrition databases.
 HAND METHOD: 1 palm=3.5oz | 1 fist=1cup | 1 thumb=1tbsp | handful=1oz
 GYM DEFAULTS: chicken breast=6oz/282cal | steak=8oz | salmon=6oz | eggs=3 large
-Scale macros to portion described.`,
+Scale macros to portion described. If a restaurant or brand is mentioned, use that brand's actual data.`,
           messages: [{ role: 'user', content: input }]
         })
       });
@@ -4406,6 +4668,7 @@ Scale macros to portion described.`,
   addEntry(n, input);
   document.getElementById('foodInput').value = '';
   hideStatus();
+  _processingVoice = false; // reset debounce flag after entry logged
 
   // If it was a fallback or custom food, offer manual adjust
   if (n.source === 'general estimate') {
@@ -6326,6 +6589,30 @@ function recordWorkoutDate() {
   lastWorkoutDate = new Date().toISOString();
   localStorage.setItem('et_last_workout', lastWorkoutDate);
 }
+
+// ── THEME SYSTEM ──
+const THEMES = ['dark', 'light', 'disco'];
+const THEME_ICONS = { dark: '🌙', light: '☀️', disco: '🪩' };
+let currentTheme = localStorage.getItem('et_theme') || 'dark';
+
+function applyTheme(theme) {
+  currentTheme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('et_theme', theme);
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = THEME_ICONS[theme] || '🌙';
+}
+
+function cycleTheme() {
+  const idx = THEMES.indexOf(currentTheme);
+  const next = THEMES[(idx + 1) % THEMES.length];
+  applyTheme(next);
+  const labels = { dark: 'Dark mode 🌙', light: 'Light mode ☀️', disco: 'DISCO MODE 🪩🎉' };
+  showToast(labels[next]);
+}
+
+// Apply saved theme on load
+(function() { applyTheme(currentTheme); })();
 
 // ── TOAST ──
 let toastTimer;
