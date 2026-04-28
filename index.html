@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👽 ET — Master Project Reference v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #06080f;
+  --surface:  #0d1017;
+  --surface2: #131720;
+  --surface3: #1a1f2e;
+  --border:   #1e2535;
+  --border2:  #252d40;
+  --accent:   #4f8fff;
+  --green:    #3dffa0;
+  --orange:   #ff9640;
+  --pink:     #ff4f8f;
+  --yellow:   #ffe04f;
+  --red:      #ff4f4f;
+  --text:     #e8edf8;
+  --muted:    #4a5470;
+  --muted2:   #6a7590;
+  --ag: rgba(79,143,255,0.15);
+  --gg: rgba(61,255,160,0.15);
+  --og: rgba(255,150,64,0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Ambient glow */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 700px 500px at 85% 5%,  rgba(79,143,255,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 500px 400px at 5%  70%, rgba(61,255,160,0.05) 0%, transparent 65%),
+    radial-gradient(ellipse 400px 300px at 50% 95%, rgba(255,150,64,0.04) 0%, transparent 65%);
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  position: relative; z-index: 1;
+}
+
+/* ── HEADER ── */
+.masthead {
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.masthead-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.logo-block {}
+
+.logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--green) 60%, #a0ffcc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+}
+
+.logo-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 6px;
+}
+
+.pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--muted2);
+  letter-spacing: 0.04em;
+}
+
+.pill.accent { border-color: rgba(79,143,255,0.4); color: var(--accent); background: rgba(79,143,255,0.08); }
+.pill.green  { border-color: rgba(61,255,160,0.4); color: var(--green);  background: rgba(61,255,160,0.08); }
+.pill.orange { border-color: rgba(255,150,64,0.4); color: var(--orange); background: rgba(255,150,64,0.08); }
+
+.how-to-use {
+  background: rgba(61,255,160,0.06);
+  border: 1px solid rgba(61,255,160,0.25);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--muted2);
+  margin-top: 20px;
+}
+
+.how-to-use strong { color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 6px; }
+.how-to-use span { color: var(--text); }
+
+/* ── TOC ── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 36px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 24px;
+}
+
+@media(max-width:560px){ .toc { grid-template-columns: 1fr; } }
+
+.toc-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  grid-column: 1 / -1;
+  margin-bottom: 10px;
+}
+
+.toc a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted2);
+  text-decoration: none;
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.15s;
+  border-radius: 4px;
+}
+
+.toc a:hover { color: var(--accent); }
+.toc a .n { color: var(--border2); font-size: 9px; min-width: 16px; }
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 32px;
+  scroll-margin-top: 24px;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.section-icon.blue   { background: rgba(79,143,255,0.12); border: 1px solid rgba(79,143,255,0.25); }
+.section-icon.green  { background: rgba(61,255,160,0.12); border: 1px solid rgba(61,255,160,0.25); }
+.section-icon.orange { background: rgba(255,150,64,0.12);  border: 1px solid rgba(255,150,64,0.25); }
+.section-icon.pink   { background: rgba(255,79,143,0.12);  border: 1px solid rgba(255,79,143,0.25); }
+.section-icon.yellow { background: rgba(255,224,79,0.12);  border: 1px solid rgba(255,224,79,0.25); }
+.section-icon.red    { background: rgba(255,79,79,0.12);   border: 1px solid rgba(255,79,79,0.25); }
+
+.section-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+  letter-spacing: 0.04em;
+}
+
+/* ── CARDS ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media(max-width:600px){ .card-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.6;
+}
+
+.card-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.card.done   { border-left: 3px solid var(--green);  }
+.card.todo   { border-left: 3px solid var(--orange); }
+.card.future { border-left: 3px solid var(--accent); }
+.card.bug    { border-left: 3px solid var(--red);    }
+.card.warn   { border-left: 3px solid var(--yellow); }
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted2);
+  line-height: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-bottom: 10px;
+}
+
+.code-block .k  { color: var(--accent); }
+.code-block .v  { color: var(--green); }
+.code-block .o  { color: var(--orange); }
+.code-block .cm { color: var(--muted); font-style: italic; }
+.code-block .r  { color: var(--red); }
+
+/* ── LISTS ── */
+.ref-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ref-list li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--muted2);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.ref-list li .bullet {
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.ref-list li strong { color: var(--text); }
+
+/* ── KV TABLE ── */
+.kv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.kv-table tr { border-bottom: 1px solid var(--border); }
+.kv-table tr:last-child { border-bottom: none; }
+
+.kv-table td {
+  padding: 9px 12px;
+  vertical-align: top;
+  color: var(--muted2);
+}
+
+.kv-table td:first-child { color: var(--accent); width: 38%; white-space: nowrap; }
+.kv-table td:last-child  { color: var(--green); }
+
+.kv-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+/* ── STATUS BADGE ── */
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.badge.done    { background: rgba(61,255,160,0.1);  color: var(--green);  border: 1px solid rgba(61,255,160,0.3); }
+.badge.todo    { background: rgba(255,150,64,0.1);  color: var(--orange); border: 1px solid rgba(255,150,64,0.3); }
+.badge.future  { background: rgba(79,143,255,0.1);  color: var(--accent); border: 1px solid rgba(79,143,255,0.3); }
+.badge.warn    { background: rgba(255,224,79,0.1);  color: var(--yellow); border: 1px solid rgba(255,224,79,0.3); }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+/* ── INLINE ACCENT TEXT ── */
+.acc  { color: var(--accent); }
+.grn  { color: var(--green); }
+.org  { color: var(--orange); }
+.muted { color: var(--muted2); font-size: 12px; }
+
+/* ── PROMPT BOX ── */
+.prompt-box {
+  background: var(--surface2);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  line-height: 1.9;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ══ MASTHEAD ══ -->
+<div class="masthead">
+  <div class="masthead-top">
+    <div class="logo-block">
+      <div class="logo">👽 ET</div>
+      <div class="logo-sub">Master Project Reference v3 · Voice Food Tracker</div>
+    </div>
+    <div class="meta-pills">
+      <span class="pill green">✓ PWA Live</span>
+      <span class="pill accent">HTML → Flutter</span>
+      <span class="pill orange">Android S25+</span>
+      <span class="pill">Owner: Amber Washburn</span>
+    </div>
+  </div>
+
+  <div class="how-to-use">
+    <strong>📋 How to use this file</strong>
+    Start a new Claude chat and say: <span>"I'm continuing to build my ET food tracking app. Here is my master project reference."</span> Upload this file along with the latest <span>index.html</span>, <span>sw.js</span>, <span>manifest.json</span>, <span>icon-192.png</span>, and <span>icon-512.png</span>. This file replaces all previous summary versions.
+  </div>
+</div>
+
+<!-- ══ TABLE OF CONTENTS ══ -->
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <a href="#identity"><span class="n">01</span> App Identity & Stack</a>
+  <a href="#objectives"><span class="n">02</span> Core Objectives</a>
+  <a href="#features"><span class="n">03</span> Features Built</a>
+  <a href="#architecture"><span class="n">04</span> Architecture Rules</a>
+  <a href="#storage"><span class="n">05</span> localStorage Keys</a>
+  <a href="#voice"><span class="n">06</span> Voice System</a>
+  <a href="#pwa"><span class="n">07</span> PWA / GitHub Deploy</a>
+  <a href="#bugs"><span class="n">08</span> Bugs Fixed (All Sessions)</a>
+  <a href="#decisions"><span class="n">09</span> Key Decisions</a>
+  <a href="#todo"><span class="n">10</span> Active To-Do</a>
+  <a href="#future"><span class="n">11</span> Future Roadmap</a>
+  <a href="#prompt"><span class="n">12</span> Resume Prompt</a>
+</div>
+
+<!-- ══ 01 IDENTITY ══ -->
+<div class="section" id="identity">
+  <div class="section-head">
+    <div class="section-icon blue">🪪</div>
+    <div>
+      <div class="section-title">App Identity &amp; Stack</div>
+      <div class="section-subtitle">What ET is, who it's for, and what it's built on</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="kv-wrap">
+      <table class="kv-table">
+        <tr><td>App name</td><td>ET (pronounced "Eat")</td></tr>
+        <tr><td>Mascot</td><td>👽 Alien buddy</td></tr>
+        <tr><td>Wake phrases</td><td>"Hey ET" · "E.T." · "Hey Eat"</td></tr>
+        <tr><td>Owner</td><td>Amber Washburn</td></tr>
+        <tr><td>Family</td><td>Trip, Gage, Chris, Seth, Reagan</td></tr>
+        <tr><td>Stores</td><td>Walmart+, Sam's Club</td></tr>
+      </table>
+    </div>
+    <div class="kv-wrap">
+      <table class="kv-table">
+        <tr><td>Current stack</td><td>HTML / CSS / JS (single file)</td></tr>
+        <tr><td>AI models</td><td>Claude Sonnet 4 + Haiku 4.5</td></tr>
+        <tr><td>Data storage</td><td>localStorage (all data)</td></tr>
+        <tr><td>Hosting</td><td>GitHub Pages (free, HTTPS)</td></tr>
+        <tr><td>Deployed as</td><td>PWA — installable on Android</td></tr>
+        <tr><td>Future stack</td><td>Flutter (iOS + Android native)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="code-block"><span class="k">GitHub repo URL:</span>   <span class="v">https://github.com/[username]/et-app</span>
+<span class="k">Live app URL:</span>      <span class="v">https://[username].github.io/et-app</span>
+<span class="k">Files in repo:</span>     <span class="v">index.html · sw.js · manifest.json · icon-192.png · icon-512.png</span>
+<span class="k">API key storage:</span>   <span class="v">localStorage 'et_api_key'  (lowercase — critical)</span></div>
+</div>
+
+<!-- ══ 02 OBJECTIVES ══ -->
+<div class="section" id="objectives">
+  <div class="section-head">
+    <div class="section-icon green">🎯</div>
+    <div>
+      <div class="section-title">Core Objectives</div>
+      <div class="section-subtitle">The main goals driving this project</div>
+    </div>
+  </div>
+
+  <ul class="ref-list">
+    <li><span class="bullet">→</span><div><strong>Voice-first food logging</strong> — Users should be able to say what they ate naturally, with no typing required. Designed for real-world use while cooking, driving, or working out.</div></li>
+    <li><span class="bullet">→</span><div><strong>Personality over guilt</strong> — ET roasts junk food, celebrates goals, and calls out skipped workouts with humor. Escalating reactions, never shame-based like Duolingo's sad owl.</div></li>
+    <li><span class="bullet">→</span><div><strong>No scale needed</strong> — Portion intelligence using hand method (palm, fist, thumb) and visual sizes. Designed for normal people, not bodybuilders weighing every gram.</div></li>
+    <li><span class="bullet">→</span><div><strong>Family app</strong> — Built for the Washburn household. Future family mode planned with household dashboard for Trip, Gage, Chris, Seth, and Reagan.</div></li>
+    <li><span class="bullet">→</span><div><strong>Walmart / Sam's Club integration</strong> — Pantry auto-populates from those stores. Receipt scanning reads brands for accurate calorie lookup.</div></li>
+    <li><span class="bullet">→</span><div><strong>Installable on Android</strong> — Must feel like a real downloaded app with no browser bar. PWA on GitHub Pages satisfies this without app store submission.</div></li>
+    <li><span class="bullet">→</span><div><strong>Accent-resilient voice</strong> — Claude Haiku accent cleanup agent runs on every voice transcript before food lookup. Fixes mishearing, spoken numbers, filler words.</div></li>
+  </ul>
+</div>
+
+<!-- ══ 03 FEATURES ══ -->
+<div class="section" id="features">
+  <div class="section-head">
+    <div class="section-icon green">✅</div>
+    <div>
+      <div class="section-title">Features Built</div>
+      <div class="section-subtitle">All confirmed working in current index.html</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card done">
+      <div class="card-title">🎤 Voice — Press &amp; Hold</div>
+      Hold orb to record, release to process. Words appear live in input box as you speak. Continuous SpeechRecognition mode. Wake word loop separate from tap flow.
+    </div>
+    <div class="card done">
+      <div class="card-title">👽 Accent Cleanup Agent</div>
+      Claude Haiku post-processes every voice transcript. Fixes "brokely" → "broccoli", "two eggs" → "2 eggs", strips filler words. Falls back gracefully if API unavailable.
+    </div>
+    <div class="card done">
+      <div class="card-title">🗣️ Wake Words</div>
+      Continuous loop listens for: "Hey ET", "E.T.", "Hey Eat" + 10 accent/mishearing variants. Inline command support: "Hey ET I had 3 eggs" logs instantly in one phrase.
+    </div>
+    <div class="card done">
+      <div class="card-title">📳 Haptic Feedback</div>
+      Short buzz (40ms) on mic press. Double pulse (60/40/60ms) on wake word. Light double tap (30/20/30ms) on food logged. Silent on iOS/desktop.
+    </div>
+    <div class="card done">
+      <div class="card-title">🍽️ Food Database (400+ items)</div>
+      Instant local dictionary — Smucker's, Rold Gold, Ben &amp; Jerry's, energy drinks, fast food chains. 4-tier lookup: pantry → local DB → Claude Haiku → generalFallback().
+    </div>
+    <div class="card done">
+      <div class="card-title">💧 Color-Coded Drink Tracker</div>
+      Each drink type = unique color + glow. Energy = neon green fizz, Coke = dark fizz. No 8-glass cap — shows all past goal with orange border.
+    </div>
+    <div class="card done">
+      <div class="card-title">⚡ Live Goal Ticker</div>
+      4 cards: calories, protein, water, carbs. Always uses effectiveGoals() — never raw goals.*. Turns green + pops animation on hit. Workout adjustment badge shown.
+    </div>
+    <div class="card done">
+      <div class="card-title">🏋️ Devices + Workout Import</div>
+      6 wearables (UI built). Screenshot import via Claude vision. Text parser: Keytel HR formula, StairMaster METs. 5 intensities auto-adjust macros. Sweat log with delete.
+    </div>
+    <div class="card done">
+      <div class="card-title">🛒 Pantry Profile</div>
+      Receipt upload (photo or text). AI reads brands. Manual add. Store chips for Walmart/Sam's. Pantry items highest priority in food lookup chain.
+    </div>
+    <div class="card done">
+      <div class="card-title">📊 Meal Time Insights + Reminders</div>
+      Tracks calories by day-of-week + time slot. Fires pattern insight if 60%+ of instances exceed 40% of daily goal. User can save reminder that fires every matching slot.
+    </div>
+    <div class="card done">
+      <div class="card-title">✋ Portion Intelligence</div>
+      Hand method, visual sizes, containers. Gym defaults only fire when portion IS specified. "I had 3 medium over easy eggs" correctly returns 3 eggs.
+    </div>
+    <div class="card done">
+      <div class="card-title">🧠 Smart Quick Log</div>
+      Time-of-day suggestions. Learns personal habits with frequency scoring. Custom recipes pinned to top. Shows ET personalization badge once habits are learned.
+    </div>
+    <div class="card done">
+      <div class="card-title">⚙️ Goals + Body Profile</div>
+      Cal/protein/carbs/fat/water steppers. Weight, age, sex for HR calorie formula. Goals persist across page refreshes via localStorage 'et_goals'. ET Settings section.
+    </div>
+    <div class="card done">
+      <div class="card-title">🔔 Check-In System</div>
+      Contextual meal-slot nudges. "It's 2pm — you need 45g protein still." Per-slot, once per day, never repeats. Fires only in second half of each slot window.
+    </div>
+  </div>
+</div>
+
+<!-- ══ 04 ARCHITECTURE ══ -->
+<div class="section" id="architecture">
+  <div class="section-head">
+    <div class="section-icon blue">🏗️</div>
+    <div>
+      <div class="section-title">Critical Architecture Rules</div>
+      <div class="section-subtitle">Never break these — they protect data integrity</div>
+    </div>
+  </div>
+
+  <div class="code-block"><span class="k">RULE 1 — NEVER use goals.* directly for display or calculations.</span>
+  Always call <span class="v">effectiveGoals()</span> which adds workout adjustments on top.
+  effectiveGoals() = goals + goalAdjustments (persisted to 'et_goal_adj')
+
+<span class="k">RULE 2 — FOOD LOOKUP ORDER (always this exact chain):</span>
+  <span class="v">1.</span> pantryItems (localStorage 'et_pantry') — instant, highest priority
+  <span class="v">2.</span> FOOD_DB dictionary — instant, 400+ entries
+  <span class="v">3.</span> Claude Haiku via fetch with 20s AbortController timeout
+  <span class="v">4.</span> generalFallback() — always returns something, never blocks user
+
+<span class="k">RULE 3 — DRINK LOGGING — every drink must push to ALL THREE:</span>
+  <span class="v">entries[]</span>      (main food log — shows in Today's Log)
+  <span class="v">drinkEntries[]</span> (drink subtotal tracker)
+  <span class="v">glassLog[]</span>     (color glass tracker)
+  matchDrinkType() maps brand names → DRINKS color entries
+
+<span class="k">RULE 4 — VOICE ENGINE (press-and-hold):</span>
+  orbDown() → stops wakeRecognition → 150ms delay → _startContinuousListen()
+  orbUp()   → _stopAndClean() → _cleanAndProcess() → processFood()
+  continuous: true, interimResults: true (words show live in input box)
+  Errors 'no-speech' and 'aborted' are silently ignored in continuous mode
+
+<span class="k">RULE 5 — API KEY storage key is lowercase:</span>
+  <span class="v">localStorage 'et_api_key'</span>  ← correct
+  <span class="r">localStorage 'ET_api_key'</span>  ← WRONG — causes key to vanish on reload
+  Migration code auto-copies from old uppercase key if found</div>
+</div>
+
+<!-- ══ 05 STORAGE ══ -->
+<div class="section" id="storage">
+  <div class="section-head">
+    <div class="section-icon yellow">💾</div>
+    <div>
+      <div class="section-title">localStorage Keys</div>
+      <div class="section-subtitle">Complete reference — all lowercase</div>
+    </div>
+  </div>
+
+  <div class="kv-wrap">
+    <table class="kv-table">
+      <tr><td>et_api_key</td><td>Anthropic API key (sk-ant-...)</td></tr>
+      <tr><td>et_goals</td><td>User goal object {cal, protein, carbs, fat, water, weight, age, sex}</td></tr>
+      <tr><td>et_food_history</td><td>Quick log learning — array of 200 food objects with frequency counts</td></tr>
+      <tr><td>et_daily_cal_log</td><td>Calorie patterns for meal time insights {"dow-slotId": [{date, calories}]}</td></tr>
+      <tr><td>et_reminders</td><td>Active ET pattern reminders array</td></tr>
+      <tr><td>et_shown_insights</td><td>Set — prevents re-showing same insight within 30 days</td></tr>
+      <tr><td>et_adjustments</td><td>Workout history array (20 max)</td></tr>
+      <tr><td>et_goal_adj</td><td>Current workout goal bumps {cal, protein, carbs, fat}</td></tr>
+      <tr><td>et_pantry</td><td>Pantry items array from receipts + manual entry</td></tr>
+      <tr><td>et_stores</td><td>Selected store strings array ["Walmart", "Sams Club"]</td></tr>
+      <tr><td>et_recipes</td><td>Custom saved recipes array (50 max)</td></tr>
+      <tr><td>et_device</td><td>Connected wearable ID string</td></tr>
+      <tr><td>et_last_workout</td><td>ISO date string of last logged workout</td></tr>
+      <tr><td>et_tap_dismiss</td><td>"true" / "false" — ET bubble auto-dismiss setting</td></tr>
+      <tr><td>et_count_date</td><td>Date string for midnight junk counter reset</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 06 VOICE ══ -->
+<div class="section" id="voice">
+  <div class="section-head">
+    <div class="section-icon pink">🎤</div>
+    <div>
+      <div class="section-title">Voice System — Complete Reference</div>
+      <div class="section-subtitle">How the full voice pipeline works end to end</div>
+    </div>
+  </div>
+
+  <ul class="ref-list">
+    <li><span class="bullet">1</span><div><strong>User presses and holds the orb</strong> — orbDown() fires. Haptic buzz (40ms). Any running wakeRecognition is stopped first (browser only allows one SpeechRecognition at a time). 150ms delay lets browser release the mic.</div></li>
+    <li><span class="bullet">2</span><div><strong>_startContinuousListen() runs</strong> — Creates SpeechRecognition with continuous: true, interimResults: true. Words appear live in the food input box as you speak. The orb glows green and label says "🔴 hold &amp; speak".</div></li>
+    <li><span class="bullet">3</span><div><strong>User releases the orb</strong> — orbUp() fires. Haptic double tap (30/20/30ms). _stopAndClean() stops recognition and grabs the full transcript.</div></li>
+    <li><span class="bullet">4</span><div><strong>Accent cleanup agent runs</strong> — _cleanAndProcess() sends raw transcript to Claude Haiku with a 7-second timeout. Prompt fixes mishearing, converts spoken numbers, strips filler words, corrects food names. Result shown in input box.</div></li>
+    <li><span class="bullet">5</span><div><strong>processFood() runs on cleaned text</strong> — Runs the 4-tier food lookup chain. Logs the entry. ET reacts. Haptic success buzz (30/20/30ms). Wake word loop resumes after 4 seconds.</div></li>
+  </ul>
+
+  <div class="divider"></div>
+
+  <div class="code-block"><span class="k">Wake word phrases (all trigger the mic):</span>
+  <span class="v">Primary:</span>   'hey et'  ·  'e.t.'  ·  'hey eat'
+  <span class="v">Variants:</span>  'hey e.t.'  ·  'hey e t'  ·  'hey eighty'
+              'hey eight'  ·  'hey ate'  ·  'okay et'
+              'ok et'  ·  'a et'  ·  'hey it'
+              'hey eats'  ·  'hey eaten'  ·  'hey eater'
+
+<span class="k">Inline command:</span>
+  "Hey ET I had 3 eggs"  →  logs "3 eggs" immediately, no second tap needed
+
+<span class="k">Haptic patterns:</span>
+  <span class="v">40ms</span>         → mic activated (orb pressed)
+  <span class="v">60/40/60ms</span>   → wake word confirmed
+  <span class="v">30/20/30ms</span>   → food logged successfully</div>
+</div>
+
+<!-- ══ 07 PWA ══ -->
+<div class="section" id="pwa">
+  <div class="section-head">
+    <div class="section-icon orange">📱</div>
+    <div>
+      <div class="section-title">PWA / GitHub Pages Deploy</div>
+      <div class="section-subtitle">How to host and install ET on Android</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card warn">
+      <div class="card-title">⚠️ Critical Lessons Learned</div>
+      Blob URL manifests are blocked by Chrome. Blob URL service workers are blocked by Chrome. Icons must be real PNG files at correct declared sizes. sw.js MUST be a real separate file — no workarounds exist.
+    </div>
+    <div class="card done">
+      <div class="card-title">✅ What's Working Now</div>
+      5 real files: index.html + sw.js + manifest.json + icon-192.png + icon-512.png. Auto-update bumper timestamps sw.js on every build. App reloads itself on new version detection.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="code-block"><span class="k">Required files in GitHub repo (root / main branch):</span>
+  <span class="v">index.html</span>     Main app — entire ET codebase
+  <span class="v">sw.js</span>          Service worker — contains BUILD timestamp for auto-update
+  <span class="v">manifest.json</span>  PWA manifest — display: standalone, icons referenced
+  <span class="v">icon-192.png</span>   Real 192×192 PNG alien face icon
+  <span class="v">icon-512.png</span>   Real 512×512 PNG alien face icon
+
+<span class="k">Auto-update system:</span>
+  sw.js contains <span class="v">// BUILD: YYYY-MM-DDTHH-MM-SS</span>
+  Chrome detects byte change → installs new SW → reloads all tabs
+  visibilitychange listener checks for updates every time user returns to app
+  Old caches deleted automatically on new SW activation
+
+<span class="k">GitHub Pages settings:</span>
+  Settings → Pages → Branch: main → / (root) → Save
+  Live URL: <span class="v">https://[username].github.io/et-app</span>
+
+<span class="k">Android install (Chrome only):</span>
+  Open live URL → wait 15s → ⋮ menu → Install App → Install
+  Must uninstall old shortcut first if updating
+  Must clear Chrome cache before reinstalling</div>
+
+  <div class="divider"></div>
+
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Every time you update the app</div>
+  <ul class="ref-list">
+    <li><span class="bullet">1</span><div>Bring updated <strong>index.html</strong> to Claude and say "generate updated files"</div></li>
+    <li><span class="bullet">2</span><div>Claude rebuilds <strong>sw.js</strong> with a fresh BUILD timestamp — this triggers the auto-update</div></li>
+    <li><span class="bullet">3</span><div>Upload both files to GitHub repo (replace existing)</div></li>
+    <li><span class="bullet">4</span><div>Installed users get the update automatically next time they open the app — no action needed</div></li>
+  </ul>
+</div>
+
+<!-- ══ 08 BUGS ══ -->
+<div class="section" id="bugs">
+  <div class="section-head">
+    <div class="section-icon red">🐛</div>
+    <div>
+      <div class="section-title">All Bugs Fixed Across All Sessions</div>
+      <div class="section-subtitle">Full history from session 1 through today</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card bug">
+      <div class="card-title">Syne font never imported</div>
+      CSS and pattern insights HTML both used font-family: 'Syne' but it was never in the Google Fonts link. Added to import.
+    </div>
+    <div class="card bug">
+      <div class="card-title">Goals wiped on every page refresh</div>
+      saveGoals() updated memory but never called localStorage.setItem. Goals also weren't loaded on startup. Now persist to 'et_goals'.
+    </div>
+    <div class="card bug">
+      <div class="card-title">ET_api_key vs et_api_key case mismatch</div>
+      Key was saved uppercase but loaded lowercase — different slots. Silently lost on every reload. Fixed + migration code copies old key automatically.
+    </div>
+    <div class="card bug">
+      <div class="card-title">clearTimeout was a no-op in catch block</div>
+      timeout declared const inside try → out of scope in catch. clearTimeout(undefined) called. Moved declaration outside try block.
+    </div>
+    <div class="card bug">
+      <div class="card-title">Smart chips never rendered</div>
+      renderSmartChips built the chips array but never mapped it to HTML before prepending recipes. Container stayed empty or stale.
+    </div>
+    <div class="card bug">
+      <div class="card-title">hover-bg invalid CSS property</div>
+      hover-bg was not a real CSS property. Silently ignored. Removed.
+    </div>
+    <div class="card bug">
+      <div class="card-title">Voice used MediaRecorder + Claude audio</div>
+      Original design tried to send audio to Claude API for transcription. Claude doesn't accept audio. Replaced with Web Speech API directly.
+    </div>
+    <div class="card bug">
+      <div class="card-title">Wake word conflicted with orb tap</div>
+      Browser allows only one SpeechRecognition at a time. wakeRecognition running when orb tapped → instant abort error. Now stopped explicitly before starting new session.
+    </div>
+    <div class="card bug">
+      <div class="card-title">continuous: false caused "voice error"</div>
+      Browser auto-stopped after first silence before finalizing result. Fell through to error handler. Changed to continuous: true + press-and-hold model.
+    </div>
+    <div class="card bug">
+      <div class="card-title">Blob URL manifest / service worker blocked</div>
+      Chrome blocks both. Multiple sessions tried this as a "single file" workaround. Now using real separate files — no alternative exists.
+    </div>
+    <div class="card bug">
+      <div class="card-title">Icons wrong dimensions</div>
+      72px image declared as 192px and 512px in manifest. Chrome validates actual size. Generated real alien-face PNG icons at correct sizes.
+    </div>
+    <div class="card bug">
+      <div class="card-title">saveGoals hardcoded goals.cal</div>
+      Workout bumps reset on every save. Fixed to use spread + effectiveGoals().
+    </div>
+    <div class="card bug">
+      <div class="card-title">logDrink buttons missing from Today's Log</div>
+      Drinks weren't being pushed to entries[]. Fixed — all three arrays now updated.
+    </div>
+    <div class="card bug">
+      <div class="card-title">todayJunkCount never reset at midnight</div>
+      Fixed with date comparison on et_count_date localStorage key.
+    </div>
+    <div class="card bug">
+      <div class="card-title">goalAdjustments lost on page refresh</div>
+      Workout bumps vanished on reload. Now persisted to 'et_goal_adj'.
+    </div>
+    <div class="card bug">
+      <div class="card-title">NaN in macro totals</div>
+      Null guards added to all addEntry/deleteEntry math.
+    </div>
+  </div>
+</div>
+
+<!-- ══ 09 DECISIONS ══ -->
+<div class="section" id="decisions">
+  <div class="section-head">
+    <div class="section-icon yellow">🧠</div>
+    <div>
+      <div class="section-title">Key Decisions Made</div>
+      <div class="section-subtitle">Finalized preferences and design choices</div>
+    </div>
+  </div>
+
+  <ul class="ref-list">
+    <li><span class="bullet">✓</span><div><strong>Press-and-hold mic, not tap-to-toggle</strong> — You preferred the physical feel of holding while talking and releasing when done. Matches how walkie-talkies and voice memos work.</div></li>
+    <li><span class="bullet">✓</span><div><strong>Roast-y personality, never guilt</strong> — ET is a funny sidekick. Reactions escalate with junk food (1st/2nd/3rd+). Redemption arcs when healthy food follows junk. No sad animals, no negative shame loops.</div></li>
+    <li><span class="bullet">✓</span><div><strong>Accent cleanup agent is always on</strong> — Every voice transcript goes through Claude Haiku for cleanup before food lookup. This handles different accents, mumbling, spoken numbers, and filler words.</div></li>
+    <li><span class="bullet">✓</span><div><strong>Single HTML file architecture</strong> — Entire app in one file for simplicity. PWA support requires sw.js, manifest.json, and icon files as separate real files — no blob URL workarounds.</div></li>
+    <li><span class="bullet">✓</span><div><strong>GitHub Pages for hosting</strong> — Free, HTTPS (required for mic), no backend needed. Repo is public. Live URL format: https://[username].github.io/et-app</div></li>
+    <li><span class="bullet">✓</span><div><strong>Auto-update via sw.js timestamp</strong> — Every time a new index.html is deployed, sw.js gets a fresh BUILD timestamp. Chrome detects the change and pushes the update to all installed users silently.</div></li>
+    <li><span class="bullet">✓</span><div><strong>No app store — PWA only</strong> — Install directly from Chrome on Android. No Google Play submission needed. Samsung S25+ tested and confirmed working via "Install App" in Chrome menu.</div></li>
+    <li><span class="bullet">✓</span><div><strong>API key asked once only</strong> — Stored in localStorage 'et_api_key' (lowercase). Migration code handles users who saved it under the old uppercase key. Banner hides once key is saved.</div></li>
+  </ul>
+</div>
+
+<!-- ══ 10 ACTIVE TO-DO ══ -->
+<div class="section" id="todo">
+  <div class="section-head">
+    <div class="section-icon orange">📋</div>
+    <div>
+      <div class="section-title">Active To-Do</div>
+      <div class="section-subtitle">Current pending work items</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card todo">
+      <div class="card-title">🌙 Daily reset at midnight</div>
+      Entries and totals should clear at midnight and save to history. History tab is currently a placeholder with no data.
+    </div>
+    <div class="card todo">
+      <div class="card-title">📅 Weekly history view</div>
+      History tab needs to show past days — calories, macros, streaks. Data is being recorded but not displayed yet.
+    </div>
+    <div class="card todo">
+      <div class="card-title">📦 Confirm PWA full-screen on S25+</div>
+      Browser bar should be gone after correct install. Pending final confirmation from Amber after latest 5-file upload to GitHub.
+    </div>
+    <div class="card todo">
+      <div class="card-title">📸 Photo logging</div>
+      Snap a plate and ET estimates nutrition via Claude vision API. Foundation (image → base64 → Claude) already exists in workout screenshot import.
+    </div>
+    <div class="card todo">
+      <div class="card-title">🔍 Barcode scanner</div>
+      Camera UPC scan for packaged food → Nutritionix or Open Food Facts API lookup.
+    </div>
+    <div class="card todo">
+      <div class="card-title">🚀 Onboarding flow</div>
+      First-launch goals + body profile setup. Currently users land directly in the app with default goals.
+    </div>
+    <div class="card todo">
+      <div class="card-title">📈 Progress tracking</div>
+      Weight over time chart, streak counter, weekly summary. Data is partially being collected but no visualization exists.
+    </div>
+    <div class="card todo">
+      <div class="card-title">👨‍👩‍👧‍👦 Family mode</div>
+      Household dashboard for the Washburns — Trip, Gage, Chris, Seth, Reagan each get their own profile.
+    </div>
+  </div>
+</div>
+
+<!-- ══ 11 FUTURE ROADMAP ══ -->
+<div class="section" id="future">
+  <div class="section-head">
+    <div class="section-icon blue">🔭</div>
+    <div>
+      <div class="section-title">Future Roadmap</div>
+      <div class="section-subtitle">Planned integrations and Flutter migration</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card future">
+      <div class="card-title">📱 Flutter App</div>
+      Full iOS + Android native app. Picovoice Porcupine for true background wake word (not browser-based). Will replace PWA for production.
+    </div>
+    <div class="card future">
+      <div class="card-title">⌚ Garmin Health API</div>
+      developer.garmin.com — requires developer approval. Enables real workout data pull vs. manual import.
+    </div>
+    <div class="card future">
+      <div class="card-title">🍎 Apple HealthKit</div>
+      Native Flutter plugin. Auto-imports workouts, steps, heart rate from Apple Watch.
+    </div>
+    <div class="card future">
+      <div class="card-title">🍔 Nutritionix API</div>
+      800k+ branded foods including restaurant items. Would replace/supplement the local 400-item FOOD_DB.
+    </div>
+    <div class="card future">
+      <div class="card-title">🛒 Walmart API</div>
+      developer.walmart.com — cart and order history. Auto-populates pantry from real purchase data.
+    </div>
+    <div class="card future">
+      <div class="card-title">🔊 Picovoice Porcupine</div>
+      True always-on background wake word that works when the app is closed. Replaces browser SpeechRecognition loop.
+    </div>
+  </div>
+</div>
+
+<!-- ══ 12 RESUME PROMPT ══ -->
+<div class="section" id="prompt">
+  <div class="section-head">
+    <div class="section-icon green">💬</div>
+    <div>
+      <div class="section-title">Resume Prompt</div>
+      <div class="section-subtitle">Copy this to start any new Claude session</div>
+    </div>
+  </div>
+
+  <div class="prompt-box">I'm continuing to build my ET food tracking app (ET = "Eat", alien mascot 👽, owner Amber Washburn). Here is my master project reference file — please read it carefully before we begin. The working prototype is index.html. I also have sw.js, manifest.json, icon-192.png, and icon-512.png for the PWA deployment.
+
+I want to continue with: [describe what you want to build or fix next]</div>
+</div>
+
+</div><!-- /wrap -->
+</body>
+</html>
